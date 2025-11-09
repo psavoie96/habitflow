@@ -1,47 +1,53 @@
+const API_URL = "http://localhost:5000/api/habits"; // later we’ll change this to the deployed URL
+
 const habitInput = document.getElementById("habitInput");
 const addHabitBtn = document.getElementById("addHabitBtn");
 const habitList = document.getElementById("habitList");
 
-let habits = [];
+// Load habits on page load
+window.addEventListener("DOMContentLoaded", fetchHabits);
+
+async function fetchHabits() {
+  const res = await fetch(API_URL);
+  const data = await res.json();
+  renderHabits(data);
+}
 
 // Add new habit
-addHabitBtn.addEventListener("click", () => {
-  const habitName = habitInput.value.trim();
-  if (habitName === "") return alert("Please enter a habit!");
-
-  const habit = {
-    id: Date.now(),
-    name: habitName,
-    completed: false,
-  };
-
-  habits.push(habit);
+addHabitBtn.addEventListener("click", async () => {
+  const name = habitInput.value.trim();
+  if (!name) return alert("Please enter a habit!");
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name }),
+  });
+  const newHabit = await res.json();
   habitInput.value = "";
-  renderHabits();
+  fetchHabits();
 });
 
 // Toggle completion
-function toggleHabit(id) {
-  const habit = habits.find((h) => h.id === id);
-  habit.completed = !habit.completed;
-  renderHabits();
+async function toggleHabit(id) {
+  await fetch(`${API_URL}/${id}/toggle`, { method: "PATCH" });
+  fetchHabits();
 }
 
 // Delete habit
-function deleteHabit(id) {
-  habits = habits.filter((h) => h.id !== id);
-  renderHabits();
+async function deleteHabit(id) {
+  await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+  fetchHabits();
 }
 
 // Render list
-function renderHabits() {
+function renderHabits(habits) {
   habitList.innerHTML = "";
   habits.forEach((habit) => {
     const li = document.createElement("li");
     li.className = habit.completed ? "completed" : "";
     li.innerHTML = `
-      <span onclick="toggleHabit(${habit.id})">${habit.name}</span>
-      <button onclick="deleteHabit(${habit.id})">❌</button>
+      <span onclick="toggleHabit('${habit._id}')">${habit.name}</span>
+      <button onclick="deleteHabit('${habit._id}')">❌</button>
     `;
     habitList.appendChild(li);
   });
