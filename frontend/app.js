@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/api/habits"; // later we’ll change this to the deployed URL
+const API_URL = "https://habitflow-a34m.onrender.com/api/habits";
 
 const habitInput = document.getElementById("habitInput");
 const addHabitBtn = document.getElementById("addHabitBtn");
