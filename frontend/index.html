@@ -13,18 +13,37 @@
       <p>Track your daily habits and stay consistent</p>
     </header>
 
-    <main>
-      <!-- Add Habit Form -->
-      <section class="add-habit">
+  <main>
+    <!-- Navigation Tabs -->
+    <nav class="tabs">
+      <button id="habitsTab" class="active">Habits</button>
+      <button id="dashboardTab">Dashboard</button>
+    </nav>
+
+    <!-- Habit Section -->
+    <section id="habitsSection">
+      <div class="add-habit">
         <input type="text" id="habitInput" placeholder="Enter a new habit..." />
         <button id="addHabitBtn">Add Habit</button>
-      </section>
+      </div>
+      <ul id="habitList"></ul>
+    </section>
 
-      <!-- Habit List -->
-      <section class="habit-list">
-        <ul id="habitList"></ul>
-      </section>
-    </main>
+    <!-- Dashboard Section -->
+    <section id="dashboardSection" style="display:none;">
+      <h2>Your Progress 📊</h2>
+      <div class="stats">
+        <p>Total Habits: <span id="totalHabits">0</span></p>
+        <p>Completed Habits: <span id="completedHabits">0</span></p>
+        <p>Completion Rate: <span id="completionRate">0%</span></p>
+      </div>
+      <canvas id="habitChart" width="400" height="200"></canvas>
+    </section>
+  </main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="app.js"></script>
+
 
     <footer>
       <p>Built with ❤️ during your coding bootcamp</p>

@@ -30,4 +30,24 @@ router.patch("/:id/toggle", async (req, res) => {
   res.json(habit);
 });
 
+
+// GET /api/habits/stats
+router.get("/stats", async (req, res) => {
+  try {
+    const total = await Habit.countDocuments();
+    const completed = await Habit.countDocuments({ completed: true });
+    const completionRate = total ? Math.round((completed / total) * 100) : 0;
+
+    res.json({
+      total,
+      completed,
+      completionRate,
+    });
+  } catch (error) {
+    console.error("Error fetching stats:", error);
+    res.status(500).json({ error: "Failed to fetch stats" });
+  }
+});
+
+
 module.exports = router;
