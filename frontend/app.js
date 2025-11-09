@@ -84,16 +84,19 @@ function renderHabits(habits) {
 }
 
 // Dashboard stats + chart
-function updateDashboard() {
-  const total = habits.length;
-  const completed = habits.filter((h) => h.completed).length;
-  const rate = total ? Math.round((completed / total) * 100) : 0;
+async function updateDashboard() {
+  try {
+    const res = await fetch(`${API_URL}/stats`);
+    const { total, completed, completionRate } = await res.json();
 
-  totalHabitsEl.textContent = total;
-  completedHabitsEl.textContent = completed;
-  completionRateEl.textContent = `${rate}%`;
+    totalHabitsEl.textContent = total;
+    completedHabitsEl.textContent = completed;
+    completionRateEl.textContent = `${completionRate}%`;
 
-  renderChart(completed, total - completed);
+    renderChart(completed, total - completed);
+  } catch (error) {
+    console.error("Error fetching dashboard stats:", error);
+  }
 }
 
 // Chart.js
