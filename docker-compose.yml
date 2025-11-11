@@ -1,0 +1,15 @@
+services:
+  mongo:
+    image: mongo:7
+    ports: ["27017:27017"]
+    volumes: ["mongo_data:/data/db"]
+  backend:
+    build: ./backend
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/
+      - MONGO_DB=habitflow
+      - CORS_ORIGIN=http://localhost:5500
+    ports: ["5000:5000"]
+    depends_on: [mongo]
+volumes:
+  mongo_data:
