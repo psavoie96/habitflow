@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const Habit = require("../models/Habit");
-const Event = require("../models/Event");
+const AnalyticsEvent = require("../models/AnalyticsEvent");
 
 const Joi = require("joi");
 const validate = require("../middlewares/validate");
@@ -29,7 +29,7 @@ router.post("/", validate(createHabitSchema), async (req, res, next) => {
     // Emit an analytics event (pick ONE of the two approaches below):
 
     // Option A: wait for the event to persist (simple, consistent)
-    await Event.create({ type: "habit_created", habitId: savedHabit._id });
+    await AnalyticsEvent.create({ type: "habit_created", habitId: savedHabit._id });
 
     // Option B: fire-and-forget so API response isn’t delayed
     // Event.create({ type: "habit_created", habitId: savedHabit._id }).catch((err) =>
