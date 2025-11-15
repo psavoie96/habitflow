@@ -105,6 +105,11 @@ function renderChart(done, pending) {
 
   if (chart) chart.destroy();
 
+  // Read CSS variables so chart colors follow the site's theme (change in styles.css)
+  const styles = getComputedStyle(document.documentElement);
+  const primary = styles.getPropertyValue("--primary").trim() || "#4a90e2";
+  const muted = styles.getPropertyValue("--muted").trim() || "#e4ebf5";
+
   chart = new Chart(ctx, {
     type: "doughnut",
     data: {
@@ -112,7 +117,7 @@ function renderChart(done, pending) {
       datasets: [
         {
           data: [done, pending],
-          backgroundColor: ["#4a90e2", "#e4ebf5"],
+          backgroundColor: [primary, muted],
           borderWidth: 0,
         },
       ],
